@@ -13,3 +13,27 @@ Make sure you have Python 3 and the following libraries:
 
 ```bash
 pip install torch torchvision matplotlib pillow
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torchvision import models, transforms
+from PIL import Image
+import matplotlib.pyplot as plt
+import copy
+
+# Device configuration
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# Image loading and preprocessing
+def image_loader(image_path, max_size=400):
+    image = Image.open(image_path).convert('RGB')
+    size = max(max(image.size), max_size)
+    transform = transforms.Compose([
+        transforms.Resize((size, size)),
+        transforms.ToTensor()
+    ])
+    image = transform(image)[:3, :, :].unsqueeze(0)
+    return image.to(device, torch.float)
+
+# Display tensor as image
+def imshow(t
